@@ -36,14 +36,15 @@ CREATE TABLE `post` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `post_ibfk_3` FOREIGN KEY (`cat_id`) REFERENCES `post_category` (`cat_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `post_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `post` */
 
 insert  into `post`(`post_id`,`cat_id`,`user_id`,`post_title`,`post_summary`,`post_description`,`featured_image`,`post_status`,`created_at`,`updated_at`) values 
 (1,1,1,'learn java in 30 days','okay','hey there how are you','uploads/1754393764_logo.png','active','2025-08-05 04:38:56',NULL),
 (2,2,1,'Icreativez','Softaware Company','asjhd asjfd sfjdsaf sdj cjhsdf adjfs djavsc sdnvgadisfds csdayudsbj vdsjiyadsv','uploads/1754394234_OIP.jpeg','active','2025-08-05 04:44:22',NULL),
-(3,2,1,'The Silent Language of Art: Expressing the Inexpressible','Art is a powerful form of expression that goes beyond words.','Art is more than brushstrokes on canvas or shapes molded from clay — it\'s a universal language that speaks where words fall short. It captures human emotion, history, identity, and imagination in ways that transcend time and culture. From abstract expressionism to digital design, every piece of art tells a story, provokes thought, and invites personal interpretation. In a world driven by logic and reason, art offers a space to feel, reflect, and connect with our deeper selves.\r\n','uploads/1754395629_art.jpg','active','2025-08-05 05:10:06',NULL);
+(3,2,1,'The Silent Language of Art: Expressing the Inexpressible','Art is a powerful form of expression that goes beyond words.','Art is more than brushstrokes on canvas or shapes molded from clay — it\'s a universal language that speaks where words fall short. It captures human emotion, history, identity, and imagination in ways that transcend time and culture. From abstract expressionism to digital design, every piece of art tells a story, provokes thought, and invites personal interpretation. In a world driven by logic and reason, art offers a space to feel, reflect, and connect with our deeper selves.\r\n','uploads/1754395629_art.jpg','active','2025-08-05 05:10:06',NULL),
+(4,3,1,'Echoes Beyond Andromeda: Humanity’s First Contact with the Unknown','In the year 2147, the Earth is on the brink of ruin.','As Earth faces ecological collapse, a desperate mission to the Andromeda Galaxy uncovers a signal unlike anything humanity has ever encountered—one that challenges the nature of existence and rewrites our place in the universe.','uploads/1754456937_science-background-illustration-scientific-design-flasks-glass-and-chemistry-physics-elements-generative-ai-photo.jpeg','active','2025-08-05 22:09:56',NULL);
 
 /*Table structure for table `post_category` */
 
@@ -64,6 +65,53 @@ insert  into `post_category`(`cat_id`,`cate_name`,`created_at`,`updated_at`) val
 (2,'Art',NULL,NULL),
 (3,'Science',NULL,NULL),
 (4,'Sports',NULL,NULL);
+
+/*Table structure for table `post_comments` */
+
+DROP TABLE IF EXISTS `post_comments`;
+
+CREATE TABLE `post_comments` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment_message` text DEFAULT NULL,
+  `post_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`comment_id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `post_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `post_comments` */
+
+insert  into `post_comments`(`comment_id`,`comment_message`,`post_id`,`user_id`,`created_at`) values 
+(1,'Awesome',4,1,'2025-08-06 04:11:48'),
+(2,'Amazing',4,1,'2025-08-06 04:15:07');
+
+/*Table structure for table `post_likes` */
+
+DROP TABLE IF EXISTS `post_likes`;
+
+CREATE TABLE `post_likes` (
+  `like_id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`like_id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `post_likes` */
+
+insert  into `post_likes`(`like_id`,`post_id`,`user_id`) values 
+(2,3,1),
+(4,4,2),
+(5,3,2),
+(6,4,1),
+(7,1,1);
 
 /*Table structure for table `post_tags` */
 
@@ -148,12 +196,13 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`user_id`,`first_name`,`middle_name`,`last_name`,`email`,`password`,`gender`,`date_of_birth`,`image_path`,`address`,`contact_no`,`created_at`,`updated_at`,`role_id`) values 
-(1,'Abdul','Azeez','Bhutto','abdulazeezbhutto085@gmail.com','$2y$10$rPJjmIIR3wrQaSddZr3ihOBnXBib8S.GYiLt0Kh.cI3uaDOlgaWFu','male','2003-03-10','uploads/1754392234OIP.jpeg','Baharia Town Karachi','03239265024','2025-08-05 04:18:26',NULL,1);
+(1,'Abdul','Azeez','Bhutto','abdulazeezbhutto085@gmail.com','$2y$10$rPJjmIIR3wrQaSddZr3ihOBnXBib8S.GYiLt0Kh.cI3uaDOlgaWFu','male','2003-03-10','uploads/1754392234OIP.jpeg','Baharia Town Karachi','03239265024','2025-08-05 04:18:26',NULL,1),
+(2,'Kumail','Ali','Khan','kumail@gmail.com','$2y$10$owzX2hTQwf7as3AKoCpRP.dl4Zl1DhNvzdvMIpzCH/EG4SxfeyEwa','male','2014-01-08','uploads/1754481512646559ff95fc559ff2b166bf_Men Hero Image (New)-p-1600.jpg','malir karachi','03493232307','2025-08-06 04:58:32',NULL,2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

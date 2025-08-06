@@ -9,54 +9,85 @@ include("includes/nav_bar.php");
 require_once("require/database_connection.php");
 
 // fetching latest post with user profile
-$query = "SELECT p.*, u.image_path, u.first_name, u.email 
-FROM post p
-INNER JOIN users u ON p.user_id = u.user_id
-WHERE p.post_status = 'active'
-ORDER BY p.created_at DESC
-LIMIT 1;";
+$query = "SELECT 
+    p.*, 
+    u.image_path, 
+    u.first_name, 
+    u.email,
+    (SELECT COUNT(*) FROM post_likes pl WHERE pl.post_id = p.post_id) AS total_likes,
+    (SELECT COUNT(*) FROM post_comments pc WHERE pc.post_id = p.post_id) AS total_comments
+    FROM post p
+    INNER JOIN users u ON p.user_id = u.user_id
+    WHERE p.post_status = 'active'
+    ORDER BY p.created_at DESC
+    LIMIT 1";
 
 $result = mysqli_query($connection, $query);
 
 // nav bar end
+
         if (mysqli_num_rows($result) > 0) {
             $raw = mysqli_fetch_assoc($result);
         ?>
-            <section class="featured py-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <article class="featured-post row align-items-center">
-                    <!-- Featured Post Content (Left Side) -->
-                    <div class="col-md-8">
-                        <div class="featured-post-content">
-                            <div class="featured-post-author d-flex align-items-center mb-2">
-                                <img src="<?php echo $raw['image_path'] ?? "" ?>" alt="author" class="rounded-circle me-2" width="40" height="40" />
-                                <p class="mb-0">By <span><?php echo $raw['first_name'] ?? ""; ?></span></p>
-                            </div>
-                            <a href="single_blog.php?post_id=<?php echo $raw['post_id'] ?? "" ?>" class="featured-post-title h5 d-block mb-2">
-                                <?php echo $raw['post_summary'] ?? ""; ?>
-                            </a>
-                            <ul class="featured-post-meta list-unstyled d-flex gap-3 text-muted small">
-                                <li>
-                                    <i class="fa fa-clock-o me-1"></i>
-                                    <?php echo $raw['created_at'] ?? ""; ?>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+        <section class="featured py-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <article class="featured-post row align-items-center">
+                                <!-- Featured Post Content (Left Side) -->
+                                <div class="col-md-8">
+                                    <div class="featured-post-content">
+                                        <div class="featured-post-author d-flex align-items-center mb-2">
+                                            <img src="<?php echo $raw['image_path'] ?? ''; ?>" alt="author" class="rounded-circle me-2" width="40" height="40" />
+                                            <p class="mb-0">By <span><?php echo $raw['first_name'] ?? ''; ?></span></p>
+                                        </div>
 
-                    <!-- Featured Image (Right Side) -->
-                    <div class="col-md-4">
-                        <div class="featured-post-thumb text-center">
-                            <img src="<?php echo $raw['featured_image'] ?? ""; ?>" alt="feature-post-thumb" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;" />
+                                        <a href="single_blog.php?post_id=<?php echo $raw['post_id'] ?? ''; ?>" class="featured-post-title h5 d-block mb-2">
+                                            <?php echo $raw['post_summary'] ?? ''; ?>
+                                        </a>
+
+                                        <ul class="featured-post-meta list-unstyled d-flex gap-5 text-muted small">
+                                            <li class="me-4">
+                                                <i class="fa fa-clock-o me-2"></i>
+                                                <?php echo $raw['created_at'] ?? ''; ?>
+                                            </li>
+
+                                            <li class="me-4"><?php
+                                                if(isset($_SESSION['user'])){
+                                                        ?>
+                                                        <a href = "process.php?post_id=<?php echo $raw['post_id']?>&action=like_process">
+                                                             <i class="fa fa-thumbs-up me-2"></i></a>
+                                                        <?php
+                                                }else{
+                                                    ?>
+                                                      <i class="fa fa-thumbs-up me-2"></i>
+                                                    <?php
+                                                }
+                                            ?>
+                                                <?php echo $raw['total_likes']?>
+                                                
+                                            </li>
+
+                                            <li class="me-4">
+                                                <i class="fa fa-comments me-2"></i>
+                                                <a href="post_comments.php?post_id=<?php echo $raw['post_id'] ?? ''; ?>">See Comments <?php echo $raw['total_comments']?> </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Featured Image (Right Side) -->
+                                <div class="col-md-4">
+                                    <div class="featured-post-thumb text-center">
+                                        <img src="<?php echo $raw['featured_image'] ?? ''; ?>" alt="feature-post-thumb" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;" />
+                                    </div>
+                                </div>
+                            </article>
                         </div>
                     </div>
-                </article>
-            </div>
-        </div>
-    </div>
-            </section>
+                </div>
+        </section>
+
 
         <?php
         }
@@ -72,21 +103,31 @@ $result = mysqli_query($connection, $query);
                 </div>
                 <?php
                 $query = "SELECT 
-                    p.post_id,
-                    p.post_title,
-                    p.post_summary,
-                    p.post_description,
-                    p.featured_image,
-                    p.created_at,
-                    u.first_name AS author_name,
-                    u.image_path,
-                    c.cate_name,
-                    c.cat_id
-                    FROM post p
-                    INNER JOIN users u ON p.user_id = u.user_id
-                    LEFT JOIN post_category c ON p.cat_id = c.cat_id
-                    WHERE p.post_status = 'active'
-                    ORDER BY p.created_at DESC;";
+                            p.post_id,
+                            p.post_title,
+                            p.post_summary,
+                            p.post_description,
+                            p.featured_image,
+                            p.created_at,
+                            u.first_name AS author_name,
+                            u.image_path,
+                            c.cate_name,
+                            c.cat_id,
+                            (
+                                SELECT COUNT(*) 
+                                FROM post_likes pl 
+                                WHERE pl.post_id = p.post_id
+                            ) AS total_likes,
+                            (
+                                SELECT COUNT(*) 
+                                FROM post_comments pc 
+                                WHERE pc.post_id = p.post_id
+                            ) AS total_comments
+                        FROM post p
+                        INNER JOIN users u ON p.user_id = u.user_id
+                        LEFT JOIN post_category c ON p.cat_id = c.cat_id
+                        WHERE p.post_status = 'active'
+                        ORDER BY p.created_at DESC;";
 
                 $result = mysqli_query($connection, $query);
                 if (mysqli_num_rows($result) > 0) {
@@ -112,6 +153,26 @@ $result = mysqli_query($connection, $query);
                                 <i class="fa fa-clock-o"></i>
                                 <?php echo $raw['created_at'] ?? "" ?>
                                 </li>
+                                 <li class="me-4"><?php
+                                                if(isset($_SESSION['user'])){
+                                                        ?>
+                                                        <a href = "process.php?post_id=<?php echo $raw['post_id']?>&action=like_process">
+                                                             <i class="fa fa-thumbs-up me-2"></i></a>
+                                                        <?php
+                                                }else{
+                                                    ?>
+                                                      <i class="fa fa-thumbs-up me-2"></i>
+                                                    <?php
+                                                }
+                                            ?>
+                                                <?php echo $raw['total_likes']?>
+                                                
+                                </li>
+
+                                 <li class="me-4">
+                                     <i class="fa fa-comments me-2"></i>
+                                     <a href="post_comments.php?post_id=<?php echo $raw['post_id'] ?? ''; ?>">See Comments <?php echo $raw['total_comments']?> </a>
+                                 </li>
                             </ul>
                             </div>
                             <p>
@@ -140,11 +201,22 @@ $result = mysqli_query($connection, $query);
                             p.post_description,
                             p.post_title,
                             p.featured_image,
-                            p.created_at
-                            FROM post p
-                            WHERE p.post_status = 'active'
-                            ORDER BY p.created_at DESC
-                            LIMIT 4;";
+                            p.created_at,
+                            (
+                                SELECT COUNT(*) 
+                                FROM post_likes pl 
+                                WHERE pl.post_id = p.post_id
+                            ) AS total_likes,
+                            (
+                                SELECT COUNT(*) 
+                                FROM post_comments pc 
+                                WHERE pc.post_id = p.post_id
+                            ) AS total_comments
+                        FROM post p
+                        WHERE p.post_status = 'active'
+                        ORDER BY p.created_at DESC
+                        LIMIT 4;
+                        ;";
 
                 $result = mysqli_query($connection, $query);
                 if (mysqli_num_rows($result) > 0) {
@@ -173,6 +245,26 @@ $result = mysqli_query($connection, $query);
                                     <i class="fa fa-clock-o"></i>
                                     <?php echo $raw['created_at'] ?? "" ?>
                                 </li>
+                                 <li class="me-4"><?php
+                                                if(isset($_SESSION['user'])){
+                                                        ?>
+                                                        <a href = "process.php?post_id=<?php echo $raw['post_id']?>&action=like_process">
+                                                             <i class="fa fa-thumbs-up me-2"></i></a>
+                                                        <?php
+                                                }else{
+                                                    ?>
+                                                      <i class="fa fa-thumbs-up me-2"></i>
+                                                    <?php
+                                                }
+                                            ?>
+                                                <?php echo $raw['total_likes']?>
+                                                
+                                </li>
+
+                                 <li class="me-4">
+                                     <i class="fa fa-comments me-2"></i>
+                                     <a href="post_comments.php?post_id=<?php echo $raw['post_id'] ?? ''; ?>">See Comments <?php echo $raw['total_comments']?> </a>
+                                 </li>
                                 </ul>
                             </div>
                             </div>

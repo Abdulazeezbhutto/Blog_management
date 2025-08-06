@@ -106,9 +106,9 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == "register") {
                 $_SESSION['user'] = $user;
 
                 if ($user['role_id'] == 1) {
-                    header("Location: admin/admin_dashboard.php?msg=Login successful&color=green");
+                    header("Location: index.php?msg=Login successful&color=green");
                 } elseif ($user['role_id'] == 2) {
-                    header("Location: user/user_dashboard.php?msg=Login successful&color=green");
+                    header("Location: index.php?msg=Login successful&color=green");
                 } else {
                     header("Location: auth/login.php?msg=Unknown role&color=red");
                 }
@@ -273,12 +273,56 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == "register") {
         }
     }
 
-    // update users 
 
-    // delete users
+    // update add comment 
+   elseif (isset($_POST['submit']) && $_POST['submit'] == "add_comment" && !empty($_POST['post_id']) && !empty($_SESSION['user']['user_id']) && !empty($_POST['comment']))
+    {
+    echo "<pre>";
+    print_r($_POST);  
+    print_r($_SESSION);
+    echo "</pre>";
+
+    $post_id = (int) $_POST['post_id'];
+    $user_id = (int) $_SESSION['user']['user_id'];
+    $comment = mysqli_real_escape_string($connection, trim($_POST['comment']));
+
+    $query = "INSERT INTO post_comments (comment_message, post_id, user_id) 
+              VALUES ('$comment', $post_id, $user_id)";
+
+    $result = mysqli_query($connection, $query);
+
+    if ($result) {
+        header("Location: post_comments.php?msg=Comment added&color=green");
+        exit();
+    } else {
+        header("Location: post_comments.php?msg=Something went wrong&color=red");
+        exit();
+    }
+    }
 
 
+    // like process
+    elseif(isset($_GET['post_id']) && $_GET['action'] === "like_process"){
+        echo "<pre>";
+        print_r($_REQUEST);
+        echo "</pre>";
+        $user_id = $_SESSION['user']['user_id'];
+        $post_id = mysqli_real_escape_string($connection, $_REQUEST['post_id']);
 
+        $check = "SELECT * FROM post_likes WHERE post_id = $post_id AND user_id = $user_id";
+        $result = mysqli_query($connection, $check);
+        if (mysqli_num_rows($result) > 0) {
+        // Unlike (delete)
+        $delete = "DELETE FROM post_likes WHERE post_id = $post_id AND user_id = $user_id";
+        mysqli_query($connection, $delete);
+        } else {
+            // Like (insert)
+            $insert = "INSERT INTO post_likes (post_id, user_id) VALUES ($post_id, $user_id)";
+            mysqli_query($connection, $insert);
+        }
+        header("Location: single_blog.php?post_id=$post_id");
+    }
+   
 
 
 // Invalid access

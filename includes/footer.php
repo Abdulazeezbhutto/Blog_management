@@ -12,13 +12,13 @@
         <div class="footer-nav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home </a>
+              <a class="nav-link" href="index.php">Home </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">About </a>
+              <a class="nav-link" href="about.php">About </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
+              <a class="nav-link" href="contact.php">Contact</a>
             </li>
           </ul>
         </div>
@@ -44,7 +44,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="copy-right">
-          <p>© Copyright <span id="copyrightYear"></span> - All Rights Reserved by <a href="https://staticmania.com/" target="_blank">StaticMania</a> Distributed By <a href="https://themewagon.com/" target="blank">ThemeWagon</a></p>
+          <p>© Copyright <span id="copyrightYear"></span> - All Rights Reserved by <a href="" target="_blank">Abdul Azeez </a> Distributed By <a href="#" target="blank">Icreativez Technologies..!</a></p>
         </div>
       </div>
     </div>
