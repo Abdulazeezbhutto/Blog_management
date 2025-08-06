@@ -8,7 +8,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role_id'] != 1) {
     exit;
 }
 
-// Fetch all posts with category & author
+// Fetch all posts with category & author name
 $query = "
     SELECT 
         p.post_id, 

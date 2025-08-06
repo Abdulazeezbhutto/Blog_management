@@ -12,7 +12,7 @@ include_once("includes/header.php");
     <form method="POST" action="../process.php" enctype="multipart/form-data">
 
       <div class="row g-3">
-        <!-- First Name -->
+        <!-- User First Name -->
         <div class="col-md-4">
           <label for="firstName" class="form-label">First Name</label>
           <input type="text" class="form-control" id="firstName" name="first_name" placeholder="John" required>

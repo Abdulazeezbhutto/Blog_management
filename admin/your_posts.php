@@ -11,7 +11,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role_id'] != 1) {
 // Logged-in user ID
 $user_id = intval($_SESSION['user']['user_id']);
 
-// Fetch posts with category & author
+// Fetch Posts with category & author
 $query = "
     SELECT 
         p.post_id, 

@@ -34,7 +34,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role_id'] != 1) {
               <input type="text" id="title" name="title" class="form-control" placeholder="Enter post title">
             </div>
 
-            <!-- Description -->
+            <!-- Post Description -->
             <div class="mb-3">
               <label for="description" class="form-label">Post summary</label>
               <textarea id="description" name="summary" rows="3" class="form-control" placeholder="Write your post content"></textarea>

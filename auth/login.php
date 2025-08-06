@@ -10,7 +10,7 @@ include_once("includes/header.php");
 
     <form method = "POST" action = "../process.php">
 
-    <!--Email-->
+    <!--User Email-->
       <div class="mb-3">
         <label for="inputEmail3" class="form-label">Email address</label>
         <input type="email" class="form-control" id="inputEmail3" placeholder="name@example.com" name = "email">

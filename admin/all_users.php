@@ -8,7 +8,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role_id'] != 1) {
     exit;
 }
 
-// Fetch all users except admins
+// Fetch all Users except admins 
 $query = "
     SELECT user_id, first_name, last_name, email, role_id, created_at
     FROM users

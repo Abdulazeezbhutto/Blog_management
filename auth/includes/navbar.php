@@ -20,7 +20,7 @@ require_once("require/database_connection.php");
           <a class="nav-link" href="user_dashboard.php">Home</a>
         </li>
 
-        <!-- Dropdown Component Start -->
+        <!-- Dropdown Component Start here -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
              data-bs-toggle="dropdown" aria-expanded="false">

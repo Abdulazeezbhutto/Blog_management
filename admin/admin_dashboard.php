@@ -42,7 +42,7 @@ if (isset($_SESSION["user"]) && $_SESSION["user"]['role_id'] == 1) {
         <body>
           <div class="container-fluid">
             <div class="row">
-              <!-- Sidebar -->
+              <!-- admin Sidebar -->
               <nav class="col-md-2 sidebar p-3">
                 <h4 class="text-center">Blogge</h4>
                 <hr>

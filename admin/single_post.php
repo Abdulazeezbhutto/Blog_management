@@ -10,7 +10,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $post_id = intval($_GET['id']);
 
-// Fetch post details
+// Fetch Post details
 $query = "
     SELECT 
         p.post_id, 

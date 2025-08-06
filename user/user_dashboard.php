@@ -4,7 +4,7 @@ require_once("../require/database_connection.php");
 
 // Check user session
 if (isset($_SESSION['user'])) {
-    // Redirect admin to admin dashboard
+    // Redirect admin to admin dashboard 
     if ($_SESSION['user']['role_id'] == 1) {
         header("Location: ../admin/admin_dashboard.php");
         exit();

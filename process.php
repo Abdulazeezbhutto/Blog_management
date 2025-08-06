@@ -273,9 +273,9 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == "register") {
         }
     }
 
-    // update user 
+    // update users 
 
-    // delete user
+    // delete users
 
 
 

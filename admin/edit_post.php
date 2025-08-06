@@ -8,7 +8,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role_id'] != 1) {
     exit;
 }
 
-// Check if post ID is provided
+// Check if post ID is provided or not
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("location: all_posts.php?msg=Post ID missing&color=red");
     exit;
